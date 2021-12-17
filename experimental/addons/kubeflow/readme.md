@@ -116,7 +116,7 @@ spec:
           #!/usr/bin/bash
           set -ex
 
-          git clone https://github.com/benjamintanweihao/kubeflow-mnist
+          git clone https://github.com/hongchaodeng/kubeflow-mnist
           dsl-compile --py pipeline.py --output /data/kubeflow/mnist.tar.gz
 ```
 
