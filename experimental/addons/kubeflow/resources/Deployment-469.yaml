@@ -44,13 +44,6 @@ spec:
           name: profiling
         - containerPort: 8443
           name: https-webhook
-        resources:
-          limits:
-            cpu: 200m
-            memory: 200Mi
-          requests:
-            cpu: 20m
-            memory: 20Mi
         securityContext:
           allowPrivilegeEscalation: false
       serviceAccountName: controller

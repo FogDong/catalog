@@ -44,10 +44,6 @@ spec:
         - containerPort: 9090
           name: metrics
         - containerPort: 6060
-        resources:
-          requests:
-            cpu: 100m
-            memory: 500Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

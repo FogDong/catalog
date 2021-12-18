@@ -30,7 +30,7 @@ spec:
         - configMapRef:
             name: profiles-config-2g29dd2mbd
         image: public.ecr.aws/j1r0q0g6/notebooks/access-management:v1.4
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
             path: /metrics
@@ -54,7 +54,7 @@ spec:
         - configMapRef:
             name: profiles-config-2g29dd2mbd
         image: public.ecr.aws/j1r0q0g6/notebooks/profile-controller:v1.4
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
             path: /metrics

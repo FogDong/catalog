@@ -31,7 +31,7 @@ spec:
         - configMapRef:
             name: kfserving-models-web-app-config-mtgm8bbd98
         image: kfserving/models-web-app:v0.6.1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: kfserving-models-web-app
         ports:
         - containerPort: 5000

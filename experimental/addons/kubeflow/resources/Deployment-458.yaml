@@ -62,10 +62,6 @@ spec:
           name: metrics
         - containerPort: 8008
           name: profiling
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
         securityContext:
           allowPrivilegeEscalation: false
         terminationMessagePolicy: FallbackToLogsOnError

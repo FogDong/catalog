@@ -83,13 +83,6 @@ spec:
             port: 8443
             scheme: HTTPS
           periodSeconds: 1
-        resources:
-          limits:
-            cpu: 200m
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 50Mi
         securityContext:
           allowPrivilegeEscalation: false
         terminationMessagePolicy: FallbackToLogsOnError

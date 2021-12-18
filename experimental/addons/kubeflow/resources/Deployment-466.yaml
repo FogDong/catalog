@@ -68,13 +68,6 @@ spec:
             - name: k-kubelet-probe
               value: activator
             port: 8012
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 600Mi
-          requests:
-            cpu: 300m
-            memory: 60Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

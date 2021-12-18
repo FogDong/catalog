@@ -33,7 +33,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         image: gcr.io/ml-pipeline/cache-deployer:1.7.0
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: main
       restartPolicy: Always
       serviceAccountName: kubeflow-pipelines-cache-deployer-sa

@@ -36,6 +36,6 @@ spec:
         command:
         - /opt/mpi-operator.v1
         image: mpioperator/mpi-operator:0.3.0
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: mpi-operator
       serviceAccountName: mpi-operator

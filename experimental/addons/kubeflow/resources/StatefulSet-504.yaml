@@ -31,17 +31,10 @@ spec:
         - -v=4
         - --discovery-interval=20s
         image: metacontroller/metacontroller:v0.3.0
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: metacontroller
         ports:
         - containerPort: 2345
-        resources:
-          limits:
-            cpu: "4"
-            memory: 4Gi
-          requests:
-            cpu: 500m
-            memory: 1Gi
         securityContext:
           allowPrivilegeEscalation: true
           privileged: true

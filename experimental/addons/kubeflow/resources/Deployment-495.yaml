@@ -34,7 +34,7 @@ spec:
               key: ISTIO_GATEWAY
               name: notebook-controller-config-kkt88f2bhb
         image: public.ecr.aws/j1r0q0g6/notebooks/notebook-controller:v1.4
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
             path: /metrics

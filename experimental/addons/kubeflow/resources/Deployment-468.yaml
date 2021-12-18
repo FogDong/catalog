@@ -50,13 +50,6 @@ spec:
           name: metrics
         - containerPort: 8008
           name: profiling
-        resources:
-          limits:
-            cpu: 1000m
-            memory: 1000Mi
-          requests:
-            cpu: 100m
-            memory: 100Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
