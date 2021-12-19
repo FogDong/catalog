@@ -178,4 +178,4 @@ Once the pipeline is run and finished, you will have a full end-to-end training 
 You can check out the SeldonDeployment analytics:
 
 
-![alt](seldon-analytics.jpg)
+![alt](seldon-analytics.jpeg)
