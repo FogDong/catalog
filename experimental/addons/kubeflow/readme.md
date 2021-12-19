@@ -90,7 +90,7 @@ and builds and uploads it to Kubeflow Pipelines service:
 
 ## Build and run MNIST pipeline
 
-The code in this section is based on [benjamintanweihao/kubeflow-mnist](https://github.com/benjamintanweihao/kubeflow-mnist).
+The code in this section is based on [hongchaodeng/kubeflow-mnist](https://github.com/hongchaodeng/kubeflow-mnist).
 The process includes:
 
 - git clone the source code
@@ -129,3 +129,53 @@ kubectl apply -f app.yaml
 The pipeline will be uploaded automatically. Check it out:
 
 ![alt](run-mnist.jpg)
+
+
+## Train and serve MNIST model
+
+In this example we will:
+
+- create a PVC to store and serve the model
+- create a TFJob to train the model
+- create a SeldonDeployment to serve the model
+
+The code is available [here](https://github.com/hongchaodeng/pipelines/blob/master/samples/contrib/seldon/mnist_tf_volume.py).
+
+Save the following as `app.yaml`:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: test-kfp
+spec:
+  components:
+    - name: mnist-example
+      type: upload-kfp
+      properties:
+        image: acr.kubevela.net/oamdev/kubeflow-mnist
+        outputDir: /data/kubeflow/
+        outputName: mnist-train-serve.tar.gz
+        buildScript: |-
+          #!/usr/bin/bash
+          set -ex
+
+          wget https://raw.githubusercontent.com/hongchaodeng/pipelines/master/samples/contrib/seldon/mnist_tf_volume.py
+          dsl-compile --py pipeline.py --output /data/kubeflow/mnist-train-serve.tar.gz
+```
+
+Run:
+
+```
+kubectl apply -f app.yaml
+```
+
+The pipeline will be uploaded automatically. Check it out:
+
+![alt](mnist-train-serve.jpg)
+
+Once the pipeline is run and finished, you will have a full end-to-end training and production workload.
+You can check out the SeldonDeployment analytics:
+
+
+![alt](seldon-analytics.jpg)
