@@ -112,7 +112,7 @@ spec:
       properties:
         image: acr.kubevela.net/oamdev/kubeflow-mnist
         outputDir: /data/kubeflow/
-        outputName: mnist-train-serve.tar.gz
+        outputName: mnist_tf_volume.tar.gz
         buildScript: |-
           #!/usr/bin/bash
           set -ex
