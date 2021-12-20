@@ -88,49 +88,6 @@ and builds and uploads it to Kubeflow Pipelines service:
 ![alt](upload-pipeline.jpg)
 
 
-## Build and run MNIST pipeline
-
-The code in this section is based on [hongchaodeng/kubeflow-mnist](https://github.com/hongchaodeng/kubeflow-mnist).
-The process includes:
-
-- git clone the source code
-- preprocess data
-- training and evaluation of the model
-
-Save the following as `app.yaml`:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: test-kfp
-spec:
-  components:
-    - name: mnist-example
-      type: upload-kfp
-      properties:
-        image: acr.kubevela.net/oamdev/kubeflow-mnist
-        outputDir: /data/kubeflow/
-        outputName: mnist.tar.gz
-        buildScript: |-
-          #!/usr/bin/bash
-          set -ex
-
-          git clone https://github.com/hongchaodeng/kubeflow-mnist
-          dsl-compile --py pipeline.py --output /data/kubeflow/mnist.tar.gz
-```
-
-Run:
-
-```
-kubectl apply -f app.yaml
-```
-
-The pipeline will be uploaded automatically. Check it out:
-
-![alt](run-mnist.jpg)
-
-
 ## Train and serve MNIST model
 
 In this example we will:
