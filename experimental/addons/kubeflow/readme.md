@@ -88,7 +88,7 @@ and builds and uploads it to Kubeflow Pipelines service:
 ![alt](upload-pipeline.jpg)
 
 
-## Train and serve MNIST model
+## Build and run MNIST pipeline
 
 In this example we will:
 
@@ -136,3 +136,41 @@ You can check out the SeldonDeployment analytics:
 
 
 ![alt](seldon-analytics.jpeg)
+
+
+## Train and serve MNIST model
+
+In above example we showed how to build a pipeline to train and serve MNIST model.
+Here we will show a higher level API to train and serve MNIST model by abstracting away pipeline details.
+
+
+Save the following as `app.yaml`:
+
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: test-kfp
+spec:
+  components:
+    - name: train-serve-mnist-example
+      type: train-serve-mnist
+      properties:
+        pvc:
+          name: modelpvc
+          size: 50Mi
+        training:
+          image: seldonio/deepmnistclassifier_trainer:0.3
+        serving:
+          image: seldonio/deepmnistclassifier_runtime:0.3
+        
+```
+
+Run:
+
+```
+kubectl apply -f app.yaml
+```
+
+You should be able to see the pipeline being run and check the SeldonDeployment analytics.
