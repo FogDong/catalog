@@ -20,8 +20,8 @@ from string import Template
     description="Example of training and serving seldon MNIST TF model. Like kubeflow/example-seldon but using existing images."
 )
 
-def mnist_tf_volume(train_image='seldonio/deepmnistclassifier_trainer:0.3',
-             pvc_size='50Mi',
+def mnist_tf_volume(pvc_size='50Mi',
+             train_image='seldonio/deepmnistclassifier_trainer:0.3',
              serve_image='seldonio/deepmnistclassifier_runtime:0.3'):
 
 #use volume for storing model

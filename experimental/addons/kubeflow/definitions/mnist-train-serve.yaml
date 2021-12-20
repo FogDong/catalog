@@ -35,8 +35,7 @@ spec:
                   args: ["-c", """
                     set -ex
                     PIPELINE_ID=$(curl -F "uploadfile=@mnist_tf_volume.tar.gz" ml-pipeline-ui.kubeflow.svc/apis/v1beta1/pipelines/upload | jq -r .id)
-                    curl -H "Content-Type: application/json" -X POST ${SVC}/apis/v1beta1/runs \
-                    -d @- << EOF
+                    curl -H "Content-Type: application/json" -X POST ml-pipeline-ui/apis/v1beta1/runs -d @- << EOF
                     {
                       "name":"mnist_run",
                       "pipeline_spec":{
@@ -44,7 +43,7 @@ spec:
                           "parameters":{
                               "pvc_size": \(parameter.pvc.size),
                               "train_image": \(parameter.train.image),
-                              "serve_image": \(parameter.serve.image),
+                              "serve_image": \(parameter.serve.image)
                           }
                       }
                     }
