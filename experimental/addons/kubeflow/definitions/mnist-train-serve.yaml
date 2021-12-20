@@ -34,8 +34,7 @@ spec:
                   command: ["/usr/bin/bash"]
                   args: ["-c", """
                     set -ex
-                    dsl-compile --py mnist_tf_volume.py --output mnist.tar.gz
-                    PIPELINE_ID=$(curl -F "uploadfile=@mnist.tar.gz" ml-pipeline-ui.kubeflow.svc/apis/v1beta1/pipelines/upload | jq -r .id)
+                    PIPELINE_ID=$(curl -F "uploadfile=@mnist_tf_volume.tar.gz" ml-pipeline-ui.kubeflow.svc/apis/v1beta1/pipelines/upload | jq -r .id)
                     curl -H "Content-Type: application/json" -X POST ${SVC}/apis/v1beta1/runs \
                     -d @- << EOF
                     {
@@ -43,15 +42,9 @@ spec:
                       "pipeline_spec":{
                           "pipeline_id":"${PIPELINE_ID}"
                           "parameters":{
-                              "pvc": {
-                                "size": \(parameter.pvc.size)
-                              },
-                              "train": {
-                                "image": \(parameter.train.image)
-                              },
-                              "serve": {
-                                "image": \(parameter.serve.image)
-                              }
+                              "pvc_size": \(parameter.pvc.size),
+                              "train_image": \(parameter.train.image),
+                              "serve_image": \(parameter.serve.image),
                           }
                       }
                     }

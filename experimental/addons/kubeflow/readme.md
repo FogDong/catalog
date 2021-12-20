@@ -118,7 +118,7 @@ spec:
           set -ex
 
           wget https://raw.githubusercontent.com/hongchaodeng/pipelines/master/samples/contrib/seldon/mnist_tf_volume.py
-          dsl-compile --py mnist_tf_volume.py --output /data/kubeflow/mnist-train-serve.tar.gz
+          dsl-compile --py mnist_tf_volume.py --output /data/kubeflow/mnist_tf_volume.tar.gz
 ```
 
 Run:
@@ -158,7 +158,7 @@ spec:
       type: train-serve-mnist
       properties:
         pvc:
-          size: 50Mi
+          size: 20Gi # 50Mi is enough on kind cluster
         train:
           image: seldonio/deepmnistclassifier_trainer:0.3
         serve:
