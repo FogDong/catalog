@@ -129,7 +129,7 @@ kubectl apply -f app.yaml
 
 The pipeline will be uploaded automatically. Check it out:
 
-![alt](mnist-train-serve.jpg)
+![alt](mnist.png)
 
 Once the pipeline is run and finished, you will have a full end-to-end training and production workload.
 You can check out the SeldonDeployment analytics:
