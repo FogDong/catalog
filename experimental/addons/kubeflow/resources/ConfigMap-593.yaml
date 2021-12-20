@@ -1,0 +1,8 @@
+# Source: seldon-core-operator/templates/configmap_seldon-spartakus-config.yaml
+apiVersion: v1
+data:
+  version.properties: spartakus_volunteer_extensions='{"seldon-core-version":"0.5"}'
+kind: ConfigMap
+metadata:
+  name: seldon-spartakus-config
+  namespace: kube-system

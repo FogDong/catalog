@@ -1,0 +1,12 @@
+# Source: seldon-core-operator/templates/clusterrole_seldon-spartakus-volunteer.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: seldon-spartakus-volunteer-seldon-system
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - nodes
+  verbs:
+  - list

@@ -1,0 +1,43 @@
+# Source: seldon-core-operator/templates/webhook.yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: 'seldon-system/seldon-serving-cert'
+  labels:
+    app: seldon
+    app.kubernetes.io/instance: 'seldon-core'
+    app.kubernetes.io/name: 'seldon-core-operator'
+    app.kubernetes.io/version: '1.12.0'
+  name: seldon-validating-webhook-configuration-seldon-system
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    caBundle: 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURJekNDQWd1Z0F3SUJBZ0lRQkQvZFp0WHV0Rk1JNUVuTkJmOXBvVEFOQmdrcWhraUc5dzBCQVFzRkFEQWMKTVJvd0dBWURWUVFERXhGamRYTjBiMjB0YldWMGNtbGpjeTFqWVRBZUZ3MHlNVEV5TWpBd016VXpNVFJhRncweQpNakV5TWpBd016VXpNVFJhTUJ3eEdqQVlCZ05WQkFNVEVXTjFjM1J2YlMxdFpYUnlhV056TFdOaE1JSUJJakFOCkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXJMVm5VcWpwZm4za296WFdoT3BISC9lWHlZa3gKcXdkcmpGVk93dVAzZ25NSFc3Uk5vMnJmNUtlZFN3Z3MybHJLaEh3YXlKYUpId1F2K2VBUlUxWmFneEgrZVRQcwpYc1BUT1ZpQXlYOVQ5dlBBa0ZYSDFNRHAvVWdYSUdudWN0a3dHNlpmS0FLQnNJUG53YjIvYmlkRlVuUXh5OHpECnlIZVY1U0Y5YUNpUU5NQ0RvelR3dU1iOUk2Vzh5YmNSRGJXZVkvN2t3aDJUT09EV3IvQ1pYV1pSV3FoR0xWTUcKLzBuOG0xcUxvVDJKWk5BUXZONCticjluM21rR1hnV3k0T0lRb3o1ekxjMnpxRGNucEhGN2lxQ1VEYTQ3cWRYSgorbDhaclVxb0MxTjl4NG91UE9QdVlsOXI3YlNoZmxPa09pZTJvY1pTZmhyd0JKNHBIODMyV0ltTDF3SURBUUFCCm8yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FxUXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUYKQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZKdW5zMGNlcVNzMnVLcnptenJXZ1Y0QgpMSVd4TUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFBd1VrdjFQemhWVzh1bEM0dG5Id045MGJqMnJPZHcydHkwCjlLWksxOHN5Sk9ic0lYTE0rQTJqajZOcWRGSk5YNFV2TXBkZUR1NUVwdnFUOFFoRklRSnFMT2VyN0xYTUdPWUYKR2wrMm82MSs0Ym05M3RtL2xRRXBZUUt1SmlZNkRXT3hMNUZtQ2Q3MUViN1locGpSRm1GL2hFMGxCNDhtQU5kZwphcDk1RDdzdktpYVd4VVFNcHV1WFIxb3RSemR2aVltak5jZ2FoUzkzWUIrdHFFak9ndjB6b1hkWGlJNnlmbkZXCnJDUzRxbTV6ZXBGbk5WRE1YMWs4VlFHYjRBUTZOd2lTZGhqdG9jRUF3eUtJUWxraW01eHV1Nis2c1AwbjlTUWgKNTExcGljeFc1NDNwbFRReG9VelZzaGk4SDl2MWpVRldBSEFhdEwyM3hsc0N5aGR1b2RNQgotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=='
+    service:
+      name: seldon-webhook-service
+      namespace: 'seldon-system'
+      path: /validate-machinelearning-seldon-io-v1-seldondeployment
+  failurePolicy: Fail
+  name: v1.vseldondeployment.kb.io
+  namespaceSelector:
+    matchExpressions:
+    - key: seldon.io/controller-id
+      operator: DoesNotExist
+  objectSelector:
+    matchExpressions:
+    - key: seldon.io/controller-id
+      operator: DoesNotExist
+  rules:
+  - apiGroups:
+    - machinelearning.seldon.io
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - seldondeployments
+  sideEffects: None

@@ -1,0 +1,68 @@
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  name: mnist-traina-serve
+  namespace: vela-system
+  annotations:
+    definition.oam.dev/description: "train and serve MNIST model"
+spec:
+  workload:
+    type: autodetects.core.oam.dev
+  schematic:
+    cue:
+      template: |
+        parameter: {
+          pvc: {
+            size: *"50Mi" | string
+          }
+          train: {
+            image: *"seldonio/deepmnistclassifier_trainer:0.3" | string
+          }
+          serve: {
+            image: *"seldonio/deepmnistclassifier_runtime:0.3" | string
+          }
+        }
+        output: {
+          apiVersion: "batch/v1"
+          kind: "Job"
+          spec: {
+            template: {
+              spec: {
+                containers: [{
+                  name: "train-serve-mnist"
+                  image: "acr.kubevela.net/oamdev/mnist-tool"
+                  command: ["/usr/bin/bash"]
+                  args: ["-c", """
+                    set -ex
+                    dsl-compile --py mnist_tf_volume.py --output mnist.tar.gz
+                    PIPELINE_ID=$(curl -F "uploadfile=@mnist.tar.gz" ml-pipeline-ui.kubeflow.svc/apis/v1beta1/pipelines/upload | jq -r .id)
+                    curl -H "Content-Type: application/json" -X POST ${SVC}/apis/v1beta1/runs \
+                    -d @- << EOF
+                    {
+                      "name":"mnist_run",
+                      "pipeline_spec":{
+                          "pipeline_id":"${PIPELINE_ID}"
+                          "parameters":{
+                              "pvc": {
+                                "size": \(parameter.pvc.size)
+                              },
+                              "train": {
+                                "image": \(parameter.train.image)
+                              },
+                              "serve": {
+                                "image": \(parameter.serve.image)
+                              }
+                          }
+                      }
+                    }
+                    EOF
+                  """]
+                }]
+                restartPolicy: "OnFailure"
+              }
+            }
+            backoffLimit: 4
+          }
+        }
+        
+        
