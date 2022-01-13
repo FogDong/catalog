@@ -1,0 +1,10 @@
+name: my-app
+image: my-repo/my-image:v1
+build:
+  python:
+  env:
+    - MODEL_DIR=/home/jovyan/my-model
+    - MODEL_FILE_LDA=clf_lda.joblib
+    - MODEL_FILE_NN=clf_nn.joblib
+deploy:
+services:
