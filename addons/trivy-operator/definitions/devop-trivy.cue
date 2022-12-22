@@ -8,7 +8,8 @@ import (
 "trivy-check": {
 	type: "workflow-step"
 	annotations: {
-		"definition.oam.dev/example-url": "https://raw.githubusercontent.com/kubevela/catalog/master/examples/trivy-operator/trivy-check-example.yaml"
+		"definition.oam.dev/example-url":         "https://raw.githubusercontent.com/kubevela/catalog/master/examples/trivy-operator/trivy-check-example.yaml"
+		"addon.oam.dev/ignore-without-component": "devop-trivy-system-helm"
 	}
 	labels: {}
 	description: ""

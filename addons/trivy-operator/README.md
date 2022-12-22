@@ -2,7 +2,7 @@
 
 # description
 - This addon provides a vulnerability scanner that continuously scans containers deployed in a Kubernetes cluster.
-- More Info is here: https://github.com/devopstales/trivy-operator/blob/main/README.md
+- You can use [AquaSecurity Trivy Operator](https://github.com/aquasecurity/trivy-operator) or [DevopStales Trivy Operator](https://github.com/devopstales/trivy-operator), default is Aqua, you can install Devop with `--type=devop`
     
 ## Install
 
@@ -30,7 +30,119 @@ local     ─┬─ -            ─── Namespace/trivy-system               
                                                                                                          Status: stored artifact for revision 'd120de77328f9ccbaaf5bfe8737220cac718bf34e98493d63b94ae20a4d0b92d'
 ```
 
-Create a new namespace for image-scan or use your exist namespace:
+### Aqua Trivy Operator
+
+Aqua Trivy Operator will scan all the workloads in the cluster.
+
+Apply an application to scan your image, following application will first deploy a `webservice` with a risky image, then scan the image and send the image result with notification.
+
+> Check out [Notification docs](https://kubevela.io/docs/end-user/workflow/built-in-workflow-defs#notification) to see how to configure your notification.
+
+```shell
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: default
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        port: 8000
+        image: fogdong/simple-web-demo:v1
+  workflow:
+    steps:
+      - name: apply-comp
+        type: apply-component
+        properties:
+          component: frontend
+      - name: image-scan
+        type: trivy-check
+        outputs:
+          - name: image-scan-result
+            valueFrom: result.message
+        properties:
+          resource:
+            name: frontend
+      - name: notification
+        type: notification
+        inputs:
+          - from: image-scan-result
+            parameterKey: slack.message.text
+        if: always
+        properties:
+          slack:
+            url:
+              value: <your slack>
+```
+
+Deploy this application:
+
+```shell
+vela up -f example.yaml
+```
+
+Checkout the application status:
+
+```
+$ vela status example
+About:
+
+  Name:         example                      
+  Namespace:    default                      
+  Created at:   2022-12-22 16:12:11 +0800 CST
+  Status:       running                      
+
+Workflow:
+
+  mode: StepByStep-DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id: z26279ngn1
+    name: apply-comp
+    type: apply-component
+    phase: succeeded 
+  - id: 92xcnw1dvc
+    name: image-scan
+    type: trivy-check
+    phase: succeeded 
+  - id: i64nsj12sg
+    name: notification
+    type: notification
+    phase: succeeded 
+
+Services:
+
+  - Name: frontend  
+    Cluster: local  Namespace: default
+    Type: webservice
+    Healthy Ready:1/1
+    No trait applied
+```
+
+All the steps are successful! Trivy-operator will scan the image and send the result with CVE info to your slack channel like:
+
+![](../../examples/trivy-operator/aqua-trivy.png)
+
+#### More
+
+If you want to check out the scan data in raw, you can check the `vuln` in the cluster:
+
+```shell
+kubectl get vuln
+```
+
+#### Reference
+
+https://github.com/aquasecurity/trivy-operator
+
+
+### Devop Trivy Operator
+
+Devop Trivy Operator need a labeled namespace to scan images. Create a new namespace for image-scan or use your exist namespace:
 
 ```shell
 vela env init image-scan --namespace image-scan
@@ -133,9 +245,9 @@ Services:
 
 All the steps are successful! Trivy-operator will scan the image and send the result with CVE info to your slack channel like:
 
-![](../../examples/trivy-operator/trivy.png)
+![](../../examples/trivy-operator/devop-trivy.png)
 
-## More
+#### More
 
 If you want to check out the scan data in raw, you can check the metrics of trivy:
 
@@ -149,6 +261,6 @@ curl -s http://localhost:9115/metrics | grep trivy_vulnerabilities
 curl -s http://localhost:9115/metrics | grep ac_vulnerabilities 
 ```
 
-## Reference
+#### Reference
 
 https://github.com/devopstales/trivy-operator

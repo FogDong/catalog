@@ -14,7 +14,12 @@ output: {
 					metadata: name: parameter.namespace
 				}]
 			},
-			trivyHelm,
+			if parameter.type == "aqua" {
+				aquaTrivyHelm
+			},
+			if parameter.type == "devop" {
+				devopTrivyHelm
+			},
 		]
 		policies: [
 			{

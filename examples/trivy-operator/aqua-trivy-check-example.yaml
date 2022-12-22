@@ -1,0 +1,36 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: default
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        port: 8000
+        image: fogdong/simple-web-demo:v1
+  workflow:
+    steps:
+      - name: apply-comp
+        type: apply-component
+        properties:
+          component: frontend
+      - name: image-scan
+        type: trivy-check
+        outputs:
+          - name: image-scan-result
+            valueFrom: result.message
+        properties:
+          resource:
+            name: frontend
+      - name: notification
+        type: notification
+        inputs:
+          - from: image-scan-result
+            parameterKey: slack.message.text
+        if: always
+        properties:
+          slack:
+            url:
+              value: <your slack>

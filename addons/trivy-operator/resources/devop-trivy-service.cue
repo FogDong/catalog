@@ -1,7 +1,7 @@
 package main
 
-trivyHelm: {
-	name: "trivy-system-helm"
+devopTrivyHelm: {
+	name: "devop-trivy-system-helm"
 	dependsOn: ["trivy-system-ns"]
 	type: "helm"
 
@@ -13,16 +13,16 @@ trivyHelm: {
 		targetNamespace: parameter.namespace
 		values: {
 			image: {
-				repository: parameter["repository"]
-				tag:        parameter["tag"]
+				repository: "https://devopstales.github.io/helm-charts"
+				tag:        "2.4.3"
 			}
 
 			persistence: {
-				enabled: parameter["enabled"]
+				enabled: parameter.devop.enabled
 			}
 
 			namespaceScanner: {
-				crontab: parameter["crontab"]
+				crontab: parameter.devop.crontab
 			}
 
 		}
